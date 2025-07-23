@@ -1,3 +1,5 @@
+import 'package:dart_task_manager/features/task_manager/entities/task.dart';
+import 'package:dart_task_manager/features/task_manager/entities/task_group.dart';
 import 'package:mcp_client/mcp_client.dart';
 
 void main() async {
@@ -22,6 +24,24 @@ void main() async {
   //// Call a tool
   //final result = await client.callTool('calculator', {'operation': 'add', 'a': 5, 'b': 3});
   //print('Result: ${(result.content.first as TextContent).text}');
+
+  final task = Task(
+    name: "Naprogramovat robota",
+    description: "Je potřeba naprogramovat robota pro automatizovaný měření",
+    deadline: DateTime(2025, 8, 2),
+    group: TaskGroup.work,
+  );
+
+  //var result = await client.callTool(
+  //  'create_task',
+  //  task.toJson(),
+  //);
+  //print('Result: ${(result.content.first as TextContent).text}');
+
+  print('');
+  print('');
+  var result = await client.callTool('list_tasks', {});
+  print('Result: ${(result.content.first as TextContent).text}');
 
   client.disconnect();
 }

@@ -1,3 +1,5 @@
+import 'package:dart_task_manager/extensions.dart';
+
 import '../entities/task.dart';
 import 'task_service.dart';
 import 'package:mcp_server/mcp_server.dart';
@@ -9,18 +11,14 @@ class TaskController {
 
   Future<CallToolResult> listTasks() async {
     final tasks = taskService.getAllTasks();
-    return CallToolResult(
-      content: [
-        Content.fromJson({
-          'tasks': [...tasks.map((task) => task.toJson())],
-        }),
-      ],
-    );
+    return CallToolResultExt.send({
+      'tasks': [...tasks.map((task) => task.toJson())],
+    });
   }
 
   Future<CallToolResult> createTask(Task task) async {
     final createdTask = taskService.addTask(task);
-    return CallToolResult(content: [Content.fromJson(createdTask.toJson())]);
+    return CallToolResultExt.send(createdTask.toJson());
   }
 
   Future<CallToolResult> updateTask(Task task) async {
@@ -34,15 +32,11 @@ class TaskController {
       result = {'success': updatedTask != null, 'task_manager': updatedTask?.toJson()};
     }
 
-    return CallToolResult(content: [Content.fromJson(result)]);
+    return CallToolResultExt.send(result);
   }
 
   Future<CallToolResult> deleteTask(String id) async {
     final success = taskService.deleteTask(id);
-    return CallToolResult(
-      content: [
-        Content.fromJson({'success': success}),
-      ],
-    );
+    return CallToolResultExt.send({'success': success});
   }
 }

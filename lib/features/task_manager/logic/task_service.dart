@@ -33,7 +33,7 @@ class TaskService {
         name: updatedTask.name,
         description: updatedTask.description,
         deadline: updatedTask.deadline,
-        group: updatedTask.group,
+        solved: updatedTask.solved,
       );
       _tasks[index] = task;
       return task;

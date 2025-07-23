@@ -1,5 +1,4 @@
 import 'package:dart_task_manager/features/task_manager/entities/task.dart';
-import 'package:dart_task_manager/features/task_manager/entities/task_group.dart';
 import 'package:mcp_client/mcp_client.dart';
 
 void main() async {
@@ -29,7 +28,7 @@ void main() async {
     name: "Naprogramovat robota",
     description: "Je potřeba naprogramovat robota pro automatizovaný měření",
     deadline: DateTime(2025, 8, 2),
-    group: TaskGroup.work,
+    solved: false,
   );
 
   //var result = await client.callTool(

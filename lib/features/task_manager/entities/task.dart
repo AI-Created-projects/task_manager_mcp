@@ -1,7 +1,5 @@
 import 'package:uuid/uuid.dart';
 
-import 'task_group.dart';
-
 class Task {
   /// Unique identifier for the task_manager
   final String id;
@@ -15,8 +13,8 @@ class Task {
   /// Deadline for the task_manager
   DateTime? deadline;
 
-  /// Group the task_manager belongs to
-  TaskGroup group;
+  /// Whether the task is solved or not
+  bool solved;
 
   /// Constructor for creating a new task_manager
   Task({
@@ -24,7 +22,7 @@ class Task {
     required this.name,
     this.description = '',
     this.deadline,
-    required this.group,
+    this.solved = false,
   }) : id = id ?? const Uuid().v4();
 
   /// Convert task_manager to JSON map
@@ -34,7 +32,7 @@ class Task {
       'name': name,
       'description': description,
       'deadline': deadline?.toIso8601String(),
-      'group': group.toJson(),
+      'solved': solved,
     };
   }
 
@@ -47,7 +45,7 @@ class Task {
       deadline: json['deadline'] != null
           ? DateTime.parse(json['deadline'] as String)
           : null,
-      group: TaskGroupExtension.fromString(json['group'] as String),
+      solved: json['solved'] as bool? ?? false,
     );
   }
 
@@ -56,20 +54,20 @@ class Task {
     String? name,
     String? description,
     DateTime? deadline,
-    TaskGroup? group,
+    bool? solved,
   }) {
     return Task(
       id: id,
       name: name ?? this.name,
       description: description ?? this.description,
       deadline: deadline ?? this.deadline,
-      group: group ?? this.group,
+      solved: solved ?? this.solved,
     );
   }
 
   @override
   String toString() {
-    return 'Task{id: $id, name: $name, description: $description, deadline: $deadline, group: ${group.toJson()}}';
+    return 'Task{id: $id, name: $name, description: $description, deadline: $deadline, solved: $solved}';
   }
 }
 

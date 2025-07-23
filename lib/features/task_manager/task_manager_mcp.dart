@@ -23,9 +23,9 @@ class TaskManagerMcp {
             'type': 'string',
             'description': 'Deadline for the task_manager in ISO 8601 format (YYYY-MM-DD)',
           },
-          'group': {'type': 'string', 'description': 'Group the task_manager belongs to (work, personal, open source)'},
+          'solved': {'type': 'boolean', 'description': 'Whether the task is solved or not'},
         },
-        'required': ['name', 'group'],
+        'required': ['name'],
       },
       handler: (args) => taskController.createTask(Task.fromJson(args)),
     );
@@ -50,9 +50,9 @@ class TaskManagerMcp {
             'type': 'string',
             'description': 'New deadline for the task_manager in ISO 8601 format (YYYY-MM-DD)',
           },
-          'group': {
-            'type': 'string',
-            'description': 'New group the task_manager belongs to (work, personal, open source)',
+          'solved': {
+            'type': 'boolean',
+            'description': 'Whether the task is solved or not',
           },
         },
         'required': ['id'],

@@ -11,7 +11,7 @@ Each task has the following properties:
 - **Name**: Name of the task
 - **Description**: Description of the task
 - **Deadline**: Deadline for completing the task
-- **Group**: Group the task belongs to (work, personal, open source)
+- **Solved**: Boolean indicating whether the task is completed (true) or not (false)
 
 ## Installation
 
@@ -43,8 +43,7 @@ dart_task_manager/
 │   └── features/
 │       └── task_manager/
 │           ├── entities/
-│           │   ├── task.dart        # Task entity
-│           │   └── task_group.dart  # Task group enum
+│           │   └── task.dart        # Task entity
 │           ├── logic/
 │           │   ├── task_controller.dart  # MCP tool handlers
 │           │   └── task_service.dart     # Task business logic
@@ -73,7 +72,7 @@ Creates a new task.
 - `name` (string, required): Name of the task
 - `description` (string, optional): Description of the task
 - `deadline` (string, optional): Deadline for the task in ISO 8601 format (YYYY-MM-DD)
-- `group` (string, required): Group the task belongs to (work, personal, open source)
+- `solved` (boolean, optional): Whether the task is completed (true) or not (false), defaults to false
 
 **Output:**
 - Object representing the created task
@@ -97,7 +96,7 @@ Updates an existing task.
 - `name` (string, optional): New name of the task
 - `description` (string, optional): New description of the task
 - `deadline` (string, optional): New deadline for the task in ISO 8601 format (YYYY-MM-DD)
-- `group` (string, optional): New group the task belongs to (work, personal, open source)
+- `solved` (boolean, optional): Whether the task is completed (true) or not (false)
 
 **Output:**
 - Object with information about the success of the operation and the updated task
@@ -156,7 +155,7 @@ Performs basic mathematical calculations.
        "name": "Complete project",
        "description": "Implement all required features",
        "deadline": "2025-08-01",
-       "group": "work"
+       "solved": false
      }
    )
 
@@ -195,7 +194,7 @@ You can use the provided MCP client to interact with the server:
      'name': 'New Task',
      'description': 'Task description',
      'deadline': '2025-08-01',
-     'group': 'work'
+     'solved': false
    });
    ```
 

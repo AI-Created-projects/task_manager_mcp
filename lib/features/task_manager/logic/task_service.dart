@@ -34,6 +34,7 @@ class TaskService {
         description: updatedTask.description,
         deadline: updatedTask.deadline,
         solved: updatedTask.solved,
+        created: _tasks[index].created, // Preserve the original creation date
       );
       _tasks[index] = task;
       return task;

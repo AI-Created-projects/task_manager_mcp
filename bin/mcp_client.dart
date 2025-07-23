@@ -29,6 +29,7 @@ void main() async {
     description: "Je potřeba naprogramovat robota pro automatizovaný měření",
     deadline: DateTime(2025, 8, 2),
     solved: false,
+    created: DateTime.now(),
   );
 
   //var result = await client.callTool(

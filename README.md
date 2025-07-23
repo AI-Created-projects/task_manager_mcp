@@ -12,6 +12,7 @@ Each task has the following properties:
 - **Description**: Description of the task
 - **Deadline**: Deadline for completing the task
 - **Solved**: Boolean indicating whether the task is completed (true) or not (false)
+- **Created**: DateTime indicating when the task was created
 
 ## Installation
 
@@ -73,6 +74,7 @@ Creates a new task.
 - `description` (string, optional): Description of the task
 - `deadline` (string, optional): Deadline for the task in ISO 8601 format (YYYY-MM-DD)
 - `solved` (boolean, optional): Whether the task is completed (true) or not (false), defaults to false
+- `created` (string, optional): When the task was created in ISO 8601 format, defaults to current time
 
 **Output:**
 - Object representing the created task
@@ -97,6 +99,7 @@ Updates an existing task.
 - `description` (string, optional): New description of the task
 - `deadline` (string, optional): New deadline for the task in ISO 8601 format (YYYY-MM-DD)
 - `solved` (boolean, optional): Whether the task is completed (true) or not (false)
+- `created` (string, optional): When the task was created in ISO 8601 format
 
 **Output:**
 - Object with information about the success of the operation and the updated task
@@ -155,7 +158,8 @@ Performs basic mathematical calculations.
        "name": "Complete project",
        "description": "Implement all required features",
        "deadline": "2025-08-01",
-       "solved": false
+       "solved": false,
+       "created": "2025-07-23T15:00:00Z"
      }
    )
 
@@ -194,7 +198,8 @@ You can use the provided MCP client to interact with the server:
      'name': 'New Task',
      'description': 'Task description',
      'deadline': '2025-08-01',
-     'solved': false
+     'solved': false,
+     'created': '2025-07-23T15:00:00Z'
    });
    ```
 

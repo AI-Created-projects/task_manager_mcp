@@ -24,6 +24,10 @@ class TaskManagerMcp {
             'description': 'Deadline for the task_manager in ISO 8601 format (YYYY-MM-DD)',
           },
           'solved': {'type': 'boolean', 'description': 'Whether the task is solved or not'},
+          'created': {
+            'type': 'string',
+            'description': 'When the task was created in ISO 8601 format (defaults to current time)',
+          },
         },
         'required': ['name'],
       },
@@ -53,6 +57,10 @@ class TaskManagerMcp {
           'solved': {
             'type': 'boolean',
             'description': 'Whether the task is solved or not',
+          },
+          'created': {
+            'type': 'string',
+            'description': 'When the task was created in ISO 8601 format',
           },
         },
         'required': ['id'],

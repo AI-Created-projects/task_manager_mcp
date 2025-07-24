@@ -21,14 +21,21 @@ class TaskController {
     return CallToolResultExt.send(createdTask.toJson());
   }
 
-  Future<CallToolResult> updateTask(Task task) async {
-    final existingTask = taskService.getTaskById(task.id);
+  Future<CallToolResult> updateTask({
+    required String id,
+    String? name,
+    String? description,
+    DateTime? deadline,
+    bool? solved,
+  }) async {
+    final existingTask = taskService.getTaskById(id);
     Map<String, dynamic> result = {};
 
     if (existingTask == null) {
       result = {'success': false, 'task_manager': null};
     } else {
-      final updatedTask = taskService.updateTask(task.id, task);
+      final task = existingTask.copyWith(name: name, description: description, deadline: deadline, solved: solved);
+      final updatedTask = taskService.updateTask(id, task);
       result = {'success': updatedTask != null, 'task_manager': updatedTask?.toJson()};
     }
 

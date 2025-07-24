@@ -46,7 +46,7 @@ class Task {
   /// Create task_manager from JSON map
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
-      id: json['id'] as String,
+      id: json['id'] as String?,
       name: json['name'] as String,
       description: json['description'] as String? ?? '',
       deadline: json['deadline'] != null

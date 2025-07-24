@@ -29,7 +29,7 @@ class TaskManagerMcp {
             'description': 'When the task was created in ISO 8601 format (defaults to current time)',
           },
         },
-        'required': ['name'],
+        'required': ['name', 'description'],
       },
       handler: (args) => taskController.createTask(Task.fromJson(args)),
     );
@@ -54,18 +54,18 @@ class TaskManagerMcp {
             'type': 'string',
             'description': 'New deadline for the task_manager in ISO 8601 format (YYYY-MM-DD)',
           },
-          'solved': {
-            'type': 'boolean',
-            'description': 'Whether the task is solved or not',
-          },
-          'created': {
-            'type': 'string',
-            'description': 'When the task was created in ISO 8601 format',
-          },
+          'solved': {'type': 'boolean', 'description': 'Whether the task is solved or not'},
+          'created': {'type': 'string', 'description': 'When the task was created in ISO 8601 format'},
         },
         'required': ['id'],
       },
-      handler: (args) => taskController.updateTask(Task.fromJson(args)),
+      handler: (args) => taskController.updateTask(
+        id: args['id'] as String,
+        name: args['name'] as String?,
+        description: args['description'] as String?,
+        deadline: args['deadline'] != null ? DateTime.parse(args['deadline'] as String) : null,
+        solved: args['solved'] as bool?,
+      ),
     );
 
     server.addTool(

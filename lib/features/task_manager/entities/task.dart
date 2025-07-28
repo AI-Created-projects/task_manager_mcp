@@ -16,6 +16,9 @@ class Task {
   /// Whether the task is solved or not
   bool solved;
 
+  /// Priority of the task (1-4, where 4 is highest)
+  int priority;
+
   /// When the task was created
   final DateTime created;
 
@@ -26,6 +29,7 @@ class Task {
     this.description = '',
     this.deadline,
     this.solved = false,
+    this.priority = 1,
     DateTime? created,
   }) :
     id = id ?? const Uuid().v4(),
@@ -39,6 +43,7 @@ class Task {
       'description': description,
       'deadline': deadline?.toIso8601String(),
       'solved': solved,
+      'priority': priority,
       'created': created.toIso8601String(),
     };
   }
@@ -53,6 +58,7 @@ class Task {
           ? DateTime.parse(json['deadline'] as String)
           : null,
       solved: json['solved'] as bool? ?? false,
+      priority: json['priority'] as int? ?? 1,
       created: json['created'] != null
           ? DateTime.parse(json['created'] as String)
           : null,
@@ -65,6 +71,7 @@ class Task {
     String? description,
     DateTime? deadline,
     bool? solved,
+    int? priority,
     DateTime? created,
   }) {
     return Task(
@@ -73,13 +80,14 @@ class Task {
       description: description ?? this.description,
       deadline: deadline ?? this.deadline,
       solved: solved ?? this.solved,
+      priority: priority ?? this.priority,
       created: created ?? this.created,
     );
   }
 
   @override
   String toString() {
-    return 'Task{id: $id, name: $name, description: $description, deadline: $deadline, solved: $solved, created: $created}';
+    return 'Task{id: $id, name: $name, description: $description, deadline: $deadline, solved: $solved, priority: $priority, created: $created}';
   }
 }
 

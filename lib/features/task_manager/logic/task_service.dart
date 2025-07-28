@@ -1,51 +1,151 @@
+import 'package:dart_task_manager/config.dart';
 import 'package:dart_task_manager/features/task_manager/entities/task.dart';
+import 'package:dart_task_manager/features/task_manager/entities/project.dart';
+import 'package:dart_task_manager/features/task_manager/logic/todoist_repository.dart';
 
+/// Custom exceptions for TaskService
+class TaskServiceException implements Exception {
+  final String message;
+  final Exception? cause;
+  
+  TaskServiceException(this.message, {this.cause});
+  
+  @override
+  String toString() => 'TaskServiceException: $message${cause != null ? ' (Cause: $cause)' : ''}';
+}
+
+/// Service for managing tasks and projects using Todoist API
 class TaskService {
-  final List<Task> _tasks = [];
+  final TodoistRepository _repository;
 
-  /// Get all tasks
-  List<Task> getAllTasks() {
-    return List.unmodifiable(_tasks);
-  }
+  /// Constructor for TaskService
+  TaskService({TodoistRepository? repository})
+      : _repository = repository ?? TodoistRepository(apiToken: todoistApiToken);
 
-  /// Get task_manager by ID
-  Task? getTaskById(String id) {
+  /// List all projects
+  Future<List<Project>> listAllProjects() async {
     try {
-      return _tasks.firstWhere((task) => task.id == id);
+      return await _repository.listAllProjects();
     } catch (e) {
-      return null;
+      // Pass through repository exceptions
+      if (e is TodoistApiException) {
+        throw e;
+      }
+      throw TaskServiceException('Failed to list projects',
+          cause: e is Exception ? e : Exception(e.toString()));
     }
   }
 
-  /// Add a new task_manager
-  Task addTask(Task task) {
-    _tasks.add(task);
-    return task;
+  /// List all tasks
+  Future<List<Task>> listAllTasks() async {
+    try {
+      return await _repository.listAllTasks();
+    } catch (e) {
+      if (e is TodoistApiException) {
+        throw e;
+      }
+      throw TaskServiceException('Failed to list tasks',
+          cause: e is Exception ? e : Exception(e.toString()));
+    }
   }
 
-  /// Update an existing task_manager
-  Task? updateTask(String id, Task updatedTask) {
-    final index = _tasks.indexWhere((task) => task.id == id);
-    if (index != -1) {
-      // Create a new task_manager with the same ID but updated properties
-      final task = Task(
-        id: id,
-        name: updatedTask.name,
-        description: updatedTask.description,
-        deadline: updatedTask.deadline,
-        solved: updatedTask.solved,
-        created: _tasks[index].created, // Preserve the original creation date
+  /// Get tasks for a specific project
+  Future<List<Task>> getTasksByProject(String projectId) async {
+    try {
+      if (projectId.isEmpty) {
+        throw TaskServiceException('Project ID cannot be empty');
+      }
+      return await _repository.getTasksByProject(projectId);
+    } catch (e) {
+      if (e is TodoistApiException) {
+        throw e;
+      }
+      throw TaskServiceException('Failed to get tasks for project',
+          cause: e is Exception ? e : Exception(e.toString()));
+    }
+  }
+
+  /// Create a new task (handles both tasks and subtasks)
+  Future<Task> createTask({
+    required String name,
+    String description = '',
+    String? projectId,
+    String? parentId,
+    DateTime? deadline,
+    int priority = 1,
+  }) async {
+    try {
+      // Validate input
+      if (name.isEmpty) {
+        throw TaskServiceException('Task name cannot be empty');
+      }
+      
+      return await _repository.createTask(
+        content: name,
+        description: description,
+        projectId: projectId,
+        parentId: parentId,
+        dueDate: deadline,
+        priority: priority,
       );
-      _tasks[index] = task;
-      return task;
+    } catch (e) {
+      if (e is TodoistApiException) {
+        throw e;
+      }
+      throw TaskServiceException('Failed to create task',
+          cause: e is Exception ? e : Exception(e.toString()));
     }
-    return null;
   }
 
-  /// Delete a task_manager by ID
-  bool deleteTask(String id) {
-    final initialLength = _tasks.length;
-    _tasks.removeWhere((task) => task.id == id);
-    return _tasks.length < initialLength;
+  /// Update an existing task
+  Future<Task> updateTask({
+    required String taskId,
+    String? name,
+    String? description,
+    String? projectId,
+    DateTime? deadline,
+    bool? solved,
+    int? priority,
+  }) async {
+    try {
+      // Validate input
+      if (taskId.isEmpty) {
+        throw TaskServiceException('Task ID cannot be empty');
+      }
+      
+      return await _repository.updateTask(
+        taskId: taskId,
+        content: name,
+        description: description,
+        projectId: projectId,
+        dueDate: deadline,
+        completed: solved,
+        priority: priority,
+      );
+    } catch (e) {
+      if (e is TodoistApiException) {
+        throw e;
+      }
+      throw TaskServiceException('Failed to update task',
+          cause: e is Exception ? e : Exception(e.toString()));
+    }
+  }
+
+  /// Delete a task by ID
+  Future<bool> deleteTask(String taskId) async {
+    try {
+      // Validate input
+      if (taskId.isEmpty) {
+        throw TaskServiceException('Task ID cannot be empty');
+      }
+      
+      return await _repository.deleteTask(taskId);
+    } catch (e) {
+      if (e is TodoistApiException) {
+        throw e;
+      }
+      throw TaskServiceException('Failed to delete task',
+          cause: e is Exception ? e : Exception(e.toString()));
+    }
   }
 }

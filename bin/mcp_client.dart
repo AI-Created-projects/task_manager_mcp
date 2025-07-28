@@ -19,6 +19,7 @@ void main() async {
   // List available tools on the server
   final tools = await client.listTools();
   print('Available tools: ${tools.map((t) => t.name).join(', ')}');
+  //print('Available tools: ${tools.map((Tool t) => t.toJson()).join(', ')}');
 
   //// Call a tool
   //final result = await client.callTool('calculator', {'operation': 'add', 'a': 5, 'b': 3});
